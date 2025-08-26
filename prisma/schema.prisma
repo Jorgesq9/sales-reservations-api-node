@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  phone     String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reservations Reservation[]
+  orders       Order[]
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  sku         String   @unique
+  name        String
+  description String?
+  priceCents  Int // precio en céntimos para evitar floats
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orderItems OrderItem[]
+}
+
+model Reservation {
+  id         String            @id @default(cuid())
+  customerId String
+  startAt    DateTime
+  endAt      DateTime
+  partySize  Int               @default(1)
+  status     ReservationStatus @default(PENDING)
+  notes      String?
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  customer Customer @relation(fields: [customerId], references: [id])
+
+  @@index([customerId, startAt])
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  NO_SHOW
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  customerId    String
+  subtotalCents Int         @default(0)
+  taxRate       Float       @default(0.21)
+  taxCents      Int         @default(0)
+  totalCents    Int         @default(0)
+  currencyCode  String      @default("EUR")
+  status        OrderStatus @default(OPEN)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  @@index([createdAt])
+  @@index([updatedAt])
+  @@index([status])
+
+  customer Customer    @relation(fields: [customerId], references: [id])
+  items    OrderItem[]
+}
+
+enum OrderStatus {
+  OPEN
+  PAID
+  CANCELLED
+  REFUNDED
+}
+
+model OrderItem {
+  id        String @id @default(cuid())
+  orderId   String
+  productId String
+  qty       Int
+  unitCents Int
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+}
