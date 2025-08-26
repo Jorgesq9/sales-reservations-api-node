@@ -28,7 +28,7 @@ Create `.env` from the example and adjust:
 
 ```env
 PORT=3000
-API_KEY=supersecreto123
+API_KEY=supersecreto123  # ← replace with your own
 TAX_RATE=0.21
 CURRENCY=EUR
 DATABASE_URL="file:./dev.db"
@@ -132,7 +132,7 @@ Crea `.env` desde el ejemplo y ajusta:
 
 ```env
 PORT=3000
-API_KEY=supersecreto123
+API_KEY=supersecreto123  # ← reemplaza con la tuya
 TAX_RATE=0.21
 CURRENCY=EUR
 DATABASE_URL="file:./dev.db"
