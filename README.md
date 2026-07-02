@@ -194,6 +194,4 @@ npm run seed
 - Campos de visualización añadidos en respuestas:  
   `subtotal`, `tax`, `total` (en EUR) y `subtotalFormatted`, `taxFormatted`, `totalFormatted`.
 
-### Demo online
 
-Añade aquí tu URL pública tras el despliegue (p. ej. `https://api.tudominio.com/api/docs`).
